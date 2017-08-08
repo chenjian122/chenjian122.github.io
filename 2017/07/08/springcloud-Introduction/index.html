@@ -6,14 +6,54 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Hexo</title>
+  <title>Spring Cloud 简介 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="简介Spring Cloud为开发者们提供了快速构建分布式系统中一些常见模式的工具以及一种简单的开发方式，比如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局锁、决策竞选、分布式会话和集群状态管理等操作。
+特性
+分布式/版本化配置
+服务注册和发现
+路由
+Service-to-service 调用
+负载均衡
+断路器
+全局锁
+决策者竞选与集群状态
+分布式消息传递
+
+主要项">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud 简介">
+<meta property="og:url" content="http://yoursite.com/2017/07/08/springcloud-Introduction/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="简介Spring Cloud为开发者们提供了快速构建分布式系统中一些常见模式的工具以及一种简单的开发方式，比如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局锁、决策竞选、分布式会话和集群状态管理等操作。
+特性
+分布式/版本化配置
+服务注册和发现
+路由
+Service-to-service 调用
+负载均衡
+断路器
+全局锁
+决策者竞选与集群状态
+分布式消息传递
+
+主要项">
+<meta property="og:updated_time" content="2017-08-08T07:28:38.335Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Spring Cloud 简介">
+<meta name="twitter:description" content="简介Spring Cloud为开发者们提供了快速构建分布式系统中一些常见模式的工具以及一种简单的开发方式，比如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局锁、决策竞选、分布式会话和集群状态管理等操作。
+特性
+分布式/版本化配置
+服务注册和发现
+路由
+Service-to-service 调用
+负载均衡
+断路器
+全局锁
+决策者竞选与集群状态
+分布式消息传递
+
+主要项">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -137,96 +177,109 @@
 </nav>
 
       <div class="body-wrap">
+        <article id="post-springcloud-Introduction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
         
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/08/springcloud-Introduction/" class="archive-article-date">
-  	<time datetime="2017-07-08T08:52:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-07-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/08/springcloud-Introduction/">Spring Cloud 简介</a>
+    <h1 class="article-title" itemprop="name">
+      Spring Cloud 简介
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h2><p>Spring Cloud为开发者们提供了快速构建分布式系统中一些常见模式的工具以及一种简单的开发<br>方式，比如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局<br>锁、决策竞选、分布式会话和集群状态管理等操作。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a><strong>特性</strong></h2><ul>
+<li>分布式/版本化配置</li>
+<li>服务注册和发现</li>
+<li>路由</li>
+<li>Service-to-service 调用</li>
+<li>负载均衡</li>
+<li>断路器</li>
+<li>全局锁</li>
+<li>决策者竞选与集群状态</li>
+<li>分布式消息传递</li>
+</ul>
+<h2 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a><strong>主要项目</strong></h2><h3 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a><strong>Spring Cloud Config</strong></h3><p>由Git仓库支持的集中式外部配置管理。配置资源直接映射到Spring环境中，如果有需要，也可以<br>在非Spring应用中使用。</p>
+<h3 id="Spring-Cloud-Netflix"><a href="#Spring-Cloud-Netflix" class="headerlink" title="Spring Cloud Netflix"></a><strong>Spring Cloud Netflix</strong></h3><p>核心组件，对多个Netflix公司的OSS开源组件进行整合（Eureka, Hystrix, Zuul, Archaius等等）</p>
+<ul>
+<li>Eureka <br>服务发现组件。</li>
+<li>Hystrix <br>断路器，为服务依赖中出现的延迟和故障提供强大的容错能力。</li>
+<li>Ribbon <br>客户端负载均衡。</li>
+<li>Zuul <br>网关组件，提供智能路由、访问过滤等功能。</li>
+<li>Archaius <br>配置管理类库，主要用于多配置存储的动态获取。</li>
+</ul>
+<h3 id="Spring-Cloud-for-Cloud-Foundry"><a href="#Spring-Cloud-for-Cloud-Foundry" class="headerlink" title="Spring Cloud for Cloud Foundry"></a><strong>Spring Cloud for Cloud Foundry</strong></h3><p>使用Pivotal Cloudfoundry整合你的应用。提供了服务发现的实现并且使其很容易实现SSO和OAuth2<br>保护资源，以及创建一个Cloudfoundry服务代理。</p>
+<h3 id="Spring-Cloud-Security"><a href="#Spring-Cloud-Security" class="headerlink" title="Spring Cloud Security"></a><strong>Spring Cloud Security</strong></h3><p>提供了一组基本的用于构建安全应用程序和服务。基于Spring Boot和Spring Security OAuth2，<br>我们可以快速创建实现单点登录，令牌中继和令牌交换等常见模式的系统。</p>
+<h3 id="Spring-Cloud-Zookeeper"><a href="#Spring-Cloud-Zookeeper" class="headerlink" title="Spring Cloud Zookeeper"></a><strong>Spring Cloud Zookeeper</strong></h3><p>为Spring Boot应用程序提供Apache Zookeeper集成，通过几个简单的注释，您可以快速启用和配置应用<br>程序中的常见模式，并使用Zookeeper构建大型分布式系统。提供的模式包括服务发现和分布式配置。</p>
+<h3 id="Spring-Cloud-CLI"><a href="#Spring-Cloud-CLI" class="headerlink" title="Spring Cloud CLI"></a><strong>Spring Cloud CLI</strong></h3><p>为Spring Cloud提供Spring Boot命令行功能。您可以编写Groovy脚本来快速运行Spring Cloud组件应用程序。</p>
+<p>更多请参考：<a href="http://projects.spring.io/spring-cloud/" target="_blank" rel="external">http://projects.spring.io/spring-cloud/</a>.</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/07/08/springcloud-Introduction/" class="archive-article-date">
+  	<time datetime="2017-07-08T08:52:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-07-08</time>
+</a>
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringCloud/">SpringCloud</a></li></ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/11/hello-world/" class="archive-article-date">
-  	<time datetime="2016-03-11T01:52:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-03-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/11/hello-world/">My Bolgs</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/transient/">transient</a></li></ul>
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2016/03/11/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">My Bolgs</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+
+
+
+
 
 
       </div>
@@ -248,8 +301,8 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
