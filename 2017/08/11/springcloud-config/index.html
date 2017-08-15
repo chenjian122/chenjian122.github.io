@@ -14,10 +14,12 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/11/springcloud-config/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="简介Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流">
-<meta property="og:updated_time" content="2017-08-15T03:36:51.433Z">
+<meta property="og:image" content="http://yoursite.com/images/20170815174511.png">
+<meta property="og:updated_time" content="2017-08-15T09:48:29.769Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud构建统一配置中心">
 <meta name="twitter:description" content="简介Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流">
+<meta name="twitter:image" content="http://yoursite.com/images/20170815174511.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -174,7 +176,10 @@
 <p>yml<br><a href="http://localhost:8888/master/springboot-dev.yml" target="_blank" rel="external">http://localhost:8888/master/springboot-dev.yml</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">path: D:/upload/</div><div class="line">spring:</div><div class="line">  jdbc:</div><div class="line">    host: localhost</div><div class="line">    password: <span class="string">'123456'</span></div><div class="line">    port: <span class="string">'3306'</span></div><div class="line">    user: root</div></pre></td></tr></table></figure></p>
 <p>properties<br><a href="http://localhost:8888/master/springboot-dev.properties" target="_blank" rel="external">http://localhost:8888/master/springboot-dev.properties</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">path: D:/upload/</div><div class="line">spring.jdbc.host: localhost</div><div class="line">spring.jdbc.password: <span class="number">123456</span></div><div class="line">spring.jdbc.port: <span class="number">3306</span></div><div class="line">spring.jdbc.user: root</div></pre></td></tr></table></figure></p>
 <h3 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h3><p>如果觉得直接访问config-server的url不安全，你可以通过Spring Security来保护您的Config Server。<br>加入Spring Security依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
-<p>默认用户名是”user”，密码随机生成。建议自己设置密码进行加密。只需要通过security.user.password就可以设置密码。</p>
+<p>默认用户名是”user”，密码随机生成。建议自己设置密码进行加密。只需要通过security.user.password就可以设置密码。<br>添加如下配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">security.user.password =test</div></pre></td></tr></table></figure></p>
+<p>然后通过curl -u user:test <a href="http://localhost:8888/springboot/dev" target="_blank" rel="external">http://localhost:8888/springboot/dev</a> 进行验证：</p>
+<p><img src="/images/20170815174511.png" alt="Alt text"></p>
+<p>说明成功读取到了服务器文件内容。</p>
 <h3 id="配置环境仓库-Environment-Repository"><a href="#配置环境仓库-Environment-Repository" class="headerlink" title="配置环境仓库( Environment Repository )"></a>配置环境仓库( Environment Repository )</h3><p>HTTP服务具有以下格式的资源：</p>
 <ul>
 <li>/{application}/{profile}[/{label}]</li>
