@@ -139,6 +139,69 @@
       <div class="body-wrap">
         
   
+    <article id="post-Eureka" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/15/Eureka/">Sring Cloud Eureka(服务注册与发现)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h3><p>Eureka是Netflix的服务治理模块。可以将服务器配置和部署为高可用性(高可用一般指服务的冗余，一个服务挂了，可以自动切换到另一个服务上，不会影响到客户体验)。</p>
+<h3 id="eureka服务端-服务注册中心"><a href="#eureka服务端-服务注册中心" class="headerlink" title="eureka服务端(服务注册中心)"></a>eureka服务端(服务注册中心)</h3><p>pom.xml中引入所需要的依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-starter-eureka-server&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Dalston.SR2&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
+<p>默认情况下eureka服务器也是一个eureka客户端。如果要使用单服务模式，只需要在application.properties进行如下配置：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8761</span></div><div class="line"></div><div class="line">eureka.instance.hostname = localhost</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span></div></pre></td></tr></table></figure></p>
+<p>创建Spring Boot应用，并添加@EnableEurekaServer注解启动一个服务注册中心<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableEurekaServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">	</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(args);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>启动工程后，访问：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a></p>
+<p><img src="/images/20170815144825.png" alt="Alt text"></p>
+<p>我们可以发现还没有任何服务。下面我来创建eureka客户端用来提供服务</p>
+<h3 id="eureka客户端-服务提供方"><a href="#eureka客户端-服务提供方" class="headerlink" title="eureka客户端(服务提供方)"></a>eureka客户端(服务提供方)</h3><p>首先pom.xml中引入所需要的依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Dalston.SR2&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
+<p>然后要配置eureka服务器的位置，对application.properties文件进行如下配置：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-client</div><div class="line">server.port = <span class="number">8762</span></div><div class="line"></div><div class="line">eureka.client.serviceUrl.defaultZone=http:<span class="comment">//localhost:8761/eureka/</span></div></pre></td></tr></table></figure></p>
+<p>当一个客户端注册到eureka，它会提供关于它自己的端口、地址、健康监控url和home页面等等的元数据，erueka会从每个实例接受心跳信息。如果心跳在配置的时间内失败，实例通常会从注册表中移除。 </p>
+<p>创建Spring Boot应用，并添加@EnableEurekaClient注解,这个标注只能用于eureka服务，还可以使用@EnableDiscoveryClient。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@EnableEurekaClient</span></div><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(args);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>启动该工程后，再次访问：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a></p>
+<p><img src="/images/20170815151346.png" alt="Alt text"></p>
+<p>可以看到，我们定义的服务注册成功了。</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/08/15/Eureka/" class="archive-article-date">
+  	<time datetime="2017-08-15T09:11:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-15</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Eureka/">Eureka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringCloud/">SpringCloud</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-springcloud-config" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -580,7 +643,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/SpringCloud/" style="font-size: 20px;">SpringCloud</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a>
+    				<a href="/tags/Eureka/" style="font-size: 10px;">Eureka</a> <a href="/tags/SpringCloud/" style="font-size: 20px;">SpringCloud</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a>
     			</div>
     	</section>
     
