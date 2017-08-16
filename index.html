@@ -180,7 +180,7 @@
 <p>所以想避免自我保护导致的服务注册列表不能修改的问题，其实也就是要使Renews (last min) &gt; Renews threshold。我们可以进行如下处理：</p>
 <ul>
 <li>关闭自我保护  可以在配置文件加入eureka.server.enableSelfPreservation=false  不建议使用</li>
-<li>调小eureka.instance.leaseRenewalIntervalInSeconds，比如设置为10秒 这样的话Renews (last min)就增多了</li>
+<li>调小eureka.instance.leaseRenewalIntervalInSeconds，比如设置为10秒 这样的话一个服务一分钟就可以发送6次心跳，Renews (last min)就增多了</li>
 <li>调小renewalPercentThreshold，比如改为0.49 比例阈值小了这样的话Renews threshold 也就小了</li>
 <li>多开几个服务实例，这相对来说比较麻烦</li>
 <li>配置Eureka Server集群，对于初学者有点麻烦</li>
