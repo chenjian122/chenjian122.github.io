@@ -183,7 +183,6 @@
 <li>调小eureka.instance.leaseRenewalIntervalInSeconds，比如设置为10秒 这样的话一个服务一分钟就可以发送6次心跳，Renews (last min)就增多了</li>
 <li>调小renewalPercentThreshold，比如改为0.49 比例阈值小了这样的话Renews threshold 也就小了</li>
 <li>多开几个服务实例，这相对来说比较麻烦</li>
-<li>配置Eureka Server集群，对于初学者有点麻烦</li>
 </ul>
 <p>为什么说开多个服务实例也可以达到呢？下面我举个列子:<br>当我们开4个服务实例时：<br>Renews threshold = (4+1)*2*0.85 ≈ 8<br>Renews (last min) = 4*2 = 8<br>不满足</p>
 <p>当我们开5个服务实例时：<br>Renews threshold = (5+1)*2*0.85 ≈ 10<br>Renews (last min) = 5*2 = 10<br>不满足</p>
