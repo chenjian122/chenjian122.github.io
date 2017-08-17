@@ -139,6 +139,69 @@
       <div class="body-wrap">
         
   
+    <article id="post-Eureka-cluster" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/17/Eureka-cluster/">Sring Cloud服务注册中心高可用集群</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<a href="https://chenjian122.github.io/2017/08/15/Eureka/" target="_blank" rel="external">Sring Cloud Eureka(服务注册与发现)</a> 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。</p>
+<h3 id="Eureka-Server的高可用"><a href="#Eureka-Server的高可用" class="headerlink" title="Eureka Server的高可用"></a>Eureka Server的高可用</h3><p>Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Server配置其他可用的serviceUrl就能实现高可用部署。</p>
+<p>首先我们需要修改host文件 添加peer1，peer2，peer3的转换<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">127.0</span>.0.1 peer1</div><div class="line"><span class="number">127.0</span>.0.1 peer2</div><div class="line"><span class="number">127.0</span>.0.1 peer3</div></pre></td></tr></table></figure></p>
+<p>Windows的hosts路径为：C:\Windows\System32\drivers\etc<br>linux的hosts路径为：/etc/hosts<br>这样的话host就都转换成本机了</p>
+<p>下面我们分别创建application-peer1.properties，application-peer2.properties，application-peer3.properties3个文件分别作为服务中心的配置，用—分割每个配置文件的内容<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8761</span></div><div class="line">eureka.instance.hostname = peer1</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer2:8762/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8762</span></div><div class="line">eureka.instance.hostname = peer2</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8763</span></div><div class="line">eureka.instance.hostname = peer3</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/</span></div></pre></td></tr></table></figure></p>
+<p>创建Spring Boot应用分别启动peer1、peer2、peer3三个服务注册中心<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableEurekaServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(<span class="string">"--spring.profiles.active=peer1"</span>);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后修改–spring.profiles.active=peer2 ，–spring.profiles.active=peer3 启动</p>
+<p>当然你也可以打成jar包启动<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer1</div><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer2</div><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer3</div></pre></td></tr></table></figure></p>
+<p>然后我们可以访问peer1的注册中心：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a> ，peer2的注册中心：<a href="http://localhost:8762/" target="_blank" rel="external">http://localhost:8762/</a> ，peer3的注册中心：<a href="http://localhost:8763/" target="_blank" rel="external">http://localhost:8763/</a></p>
+<h3 id="客户端使用配置"><a href="#客户端使用配置" class="headerlink" title="客户端使用配置"></a>客户端使用配置</h3><p>只需要将之前的单节点的配置改为多节点即可，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-client</div><div class="line">server.port = <span class="number">8768</span></div><div class="line">eureka.client.serviceUrl.defaultZone=http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/</span></div></pre></td></tr></table></figure></p>
+<p>启动该服务后，通过访问<a href="http://localhost:8761/、http://localhost:8762/" target="_blank" rel="external">http://localhost:8761/、http://localhost:8762/</a> 和 <a href="http://localhost:8763/" target="_blank" rel="external">http://localhost:8763/</a> ，可以观察到eureka-client同时被注册到了peer1、peer2和peer3上。若此时断开peer1，由于eureka-client同时也向peer2、peer3注册，因此在peer2、peer3上其他服务依然能访问到eureka-client，从而实现了高可用的服务注册中心。</p>
+<p>效果图<br><img src="/images/20170817160242.png" alt="Alt text"></p>
+<p><img src="/images/20170817160158.png" alt="Alt text"></p>
+<p><img src="/images/20170817160305.png" alt="Alt text"></p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/08/17/Eureka-cluster/" class="archive-article-date">
+  	<time datetime="2017-08-17T09:20:40.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-17</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringCloud/">SpringCloud</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Eureka-Protect" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     

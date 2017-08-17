@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>Sring Cloud服务注册中心高可用集群 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在Sring Cloud Eureka(服务注册与发现) 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。
+Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Serv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sring Cloud服务注册中心高可用集群">
+<meta property="og:url" content="http://yoursite.com/2017/08/17/Eureka-cluster/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在Sring Cloud Eureka(服务注册与发现) 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。
+Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Serv">
+<meta property="og:image" content="http://yoursite.com/images/20170817160242.png">
+<meta property="og:image" content="http://yoursite.com/images/20170817160158.png">
+<meta property="og:image" content="http://yoursite.com/images/20170817160305.png">
+<meta property="og:updated_time" content="2017-08-17T09:20:49.808Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sring Cloud服务注册中心高可用集群">
+<meta name="twitter:description" content="在Sring Cloud Eureka(服务注册与发现) 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。
+Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Serv">
+<meta name="twitter:image" content="http://yoursite.com/images/20170817160242.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/portrait.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">陈健</a></h1>
+		</hgroup>
+
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/">随笔</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="3" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
+		        
+					<a class="rss" target="_blank" href="/" title="rss">rss</a>
+		        
+					<a class="zhihu" target="_blank" href="/" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">陈健</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/portrait.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">陈健</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/">随笔</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-Eureka-cluster" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Sring Cloud服务注册中心高可用集群
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<a href="https://chenjian122.github.io/2017/08/15/Eureka/" target="_blank" rel="external">Sring Cloud Eureka(服务注册与发现)</a> 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。</p>
+<h3 id="Eureka-Server的高可用"><a href="#Eureka-Server的高可用" class="headerlink" title="Eureka Server的高可用"></a>Eureka Server的高可用</h3><p>Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Server配置其他可用的serviceUrl就能实现高可用部署。</p>
+<p>首先我们需要修改host文件 添加peer1，peer2，peer3的转换<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">127.0</span>.0.1 peer1</div><div class="line"><span class="number">127.0</span>.0.1 peer2</div><div class="line"><span class="number">127.0</span>.0.1 peer3</div></pre></td></tr></table></figure></p>
+<p>Windows的hosts路径为：C:\Windows\System32\drivers\etc<br>linux的hosts路径为：/etc/hosts<br>这样的话host就都转换成本机了</p>
+<p>下面我们分别创建application-peer1.properties，application-peer2.properties，application-peer3.properties3个文件分别作为服务中心的配置，用—分割每个配置文件的内容<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8761</span></div><div class="line">eureka.instance.hostname = peer1</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer2:8762/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8762</span></div><div class="line">eureka.instance.hostname = peer2</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8763</span></div><div class="line">eureka.instance.hostname = peer3</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/</span></div></pre></td></tr></table></figure></p>
+<p>创建Spring Boot应用分别启动peer1、peer2、peer3三个服务注册中心<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableEurekaServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(<span class="string">"--spring.profiles.active=peer1"</span>);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后修改–spring.profiles.active=peer2 ，–spring.profiles.active=peer3 启动</p>
+<p>当然你也可以打成jar包启动<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer1</div><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer2</div><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer3</div></pre></td></tr></table></figure></p>
+<p>然后我们可以访问peer1的注册中心：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a> ，peer2的注册中心：<a href="http://localhost:8762/" target="_blank" rel="external">http://localhost:8762/</a> ，peer3的注册中心：<a href="http://localhost:8763/" target="_blank" rel="external">http://localhost:8763/</a></p>
+<h3 id="客户端使用配置"><a href="#客户端使用配置" class="headerlink" title="客户端使用配置"></a>客户端使用配置</h3><p>只需要将之前的单节点的配置改为多节点即可，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-client</div><div class="line">server.port = <span class="number">8768</span></div><div class="line">eureka.client.serviceUrl.defaultZone=http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/</span></div></pre></td></tr></table></figure></p>
+<p>启动该服务后，通过访问<a href="http://localhost:8761/、http://localhost:8762/" target="_blank" rel="external">http://localhost:8761/、http://localhost:8762/</a> 和 <a href="http://localhost:8763/" target="_blank" rel="external">http://localhost:8763/</a> ，可以观察到eureka-client同时被注册到了peer1、peer2和peer3上。若此时断开peer1，由于eureka-client同时也向peer2、peer3注册，因此在peer2、peer3上其他服务依然能访问到eureka-client，从而实现了高可用的服务注册中心。</p>
+<p>效果图<br><img src="/images/20170817160242.png" alt="Alt text"></p>
+<p><img src="/images/20170817160158.png" alt="Alt text"></p>
+<p><img src="/images/20170817160305.png" alt="Alt text"></p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/08/17/Eureka-cluster/" class="archive-article-date">
+  	<time datetime="2017-08-17T09:20:40.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-17</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringCloud/">SpringCloud</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/16/Eureka-Protect/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">了解Sring Cloud Eureka的自我保护机制</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+
+      </div>
+      <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 陈健
+    	</div>
+	本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+      <li data-hook="tools-section-friends"><span class="text">友链</span><i class="icon-link"></i></li>
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/Eureka/" style="font-size: 15px;">Eureka</a> <a href="/tags/SpringCloud/" style="font-size: 20px;">SpringCloud</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a>
+    			</div>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends">
+  		
+  			<div class="friends-wrap" id="js-friends">
+  			
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://spring4all.com/">Spring For All社区</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="https://springcloud.cc/">Spring Cloud中文网</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://cmsblogs.com/">chenssy</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.feel88.cn/">大数据</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.cnblogs.com/">博客园</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.csdn.net/">CSDN</a>
+  	        
+  	        </div>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">什么都没有留下。</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
