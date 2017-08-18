@@ -6,28 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>了解Sring Cloud Eureka的自我保护机制 | Hexo</title>
+  <title>了解Sring Cloud Eureka的自我保护机制 | 陈健的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="理解eureka的自我保护机制
-向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。
-从上图我们可以看到两个状态：Renews threshold：Eureka Server 每分钟期">
+向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="了解Sring Cloud Eureka的自我保护机制">
 <meta property="og:url" content="http://yoursite.com/2017/08/16/Eureka-Protect/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="陈健的博客">
 <meta property="og:description" content="理解eureka的自我保护机制
-向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。
-从上图我们可以看到两个状态：Renews threshold：Eureka Server 每分钟期">
+向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。">
 <meta property="og:image" content="http://yoursite.com/images/20170816143304.png">
-<meta property="og:updated_time" content="2017-08-17T07:45:48.543Z">
+<meta property="og:updated_time" content="2017-08-18T06:08:42.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解Sring Cloud Eureka的自我保护机制">
 <meta name="twitter:description" content="理解eureka的自我保护机制
-向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。
-从上图我们可以看到两个状态：Renews threshold：Eureka Server 每分钟期">
+向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。">
 <meta name="twitter:image" content="http://yoursite.com/images/20170816143304.png">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="陈健的博客" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -53,6 +50,8 @@
 		  <h1 class="header-author"><a href="/">陈健</a></h1>
 		</hgroup>
 
+		
+		<p class="header-subtitle">在说做不到之前，我没有放弃</p>
 		
 
 		<nav class="header-menu">
@@ -91,7 +90,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+					<a class="github" target="_blank" href="/" title="github">github</a>
 		        
 					<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 		        
@@ -122,6 +121,8 @@
 			  <h1 class="header-author">陈健</h1>
 			</hgroup>
 			
+			<p class="header-subtitle">在说做不到之前，我没有放弃</p>
+			
 			<nav class="header-menu">
 				<ul>
 				
@@ -134,7 +135,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+						<a class="github" target="_blank" href="/" title="github">github</a>
 			        
 						<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 			        
@@ -169,6 +170,7 @@
       
         <h3 id="理解eureka的自我保护机制"><a href="#理解eureka的自我保护机制" class="headerlink" title="理解eureka的自我保护机制"></a><strong>理解eureka的自我保护机制</strong></h3><p><img src="/images/20170816143304.png" alt="Alt text"></p>
 <p>向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。</p>
+<a id="more"></a>
 <p>从上图我们可以看到两个状态：<br>Renews threshold：Eureka Server 每分钟期待收到的续约数量<br>Renews (last min): 之前1分钟内 Eureka Server 收到的续约数量</p>
 <p><strong> 先解释下什么是自我保护模式，以及自我保护模式的机制和作用：</strong><br>自我保护模式用来处理避免因为网络的原因，没能够向Eureka Server更新租约，而清理服务，其实服务这时还是正常可用的。所以为了尽可能的提高服务可用性，最好开启 Eureka Server 的自我保护模式。</p>
 <p>进入自我保护模式的判断逻辑是：默认是每15分钟检测一次，当实际接收到的上1分钟续约请求数(Renews (last min)) &lt;= 期待接收到的每分钟续约请求数(Renews threshold),则触发自我保护。当自我保护模式触发的时候，Eureka Server将不再从服务注册列表中清理不可用服务。</p>
@@ -240,25 +242,6 @@
 </nav>
 
 
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-	    <a class="jiathis_button_twitter"></a>
-	    <a class="jiathis_button_plus"></a> 
-	    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
 
 
 

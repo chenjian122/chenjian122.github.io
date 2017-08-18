@@ -6,22 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Spring Cloud构建统一配置中心 | Hexo</title>
+  <title>Spring Cloud构建统一配置中心 | 陈健的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="简介Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Cloud构建统一配置中心">
 <meta property="og:url" content="http://yoursite.com/2017/08/11/springcloud-config/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="陈健的博客">
 <meta property="og:description" content="简介Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流">
 <meta property="og:image" content="http://yoursite.com/images/20170815174511.png">
-<meta property="og:updated_time" content="2017-08-15T09:48:29.769Z">
+<meta property="og:updated_time" content="2017-08-18T06:10:10.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud构建统一配置中心">
 <meta name="twitter:description" content="简介Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流">
 <meta name="twitter:image" content="http://yoursite.com/images/20170815174511.png">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="陈健的博客" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -47,6 +47,8 @@
 		  <h1 class="header-author"><a href="/">陈健</a></h1>
 		</hgroup>
 
+		
+		<p class="header-subtitle">在说做不到之前，我没有放弃</p>
 		
 
 		<nav class="header-menu">
@@ -85,7 +87,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+					<a class="github" target="_blank" href="/" title="github">github</a>
 		        
 					<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 		        
@@ -116,6 +118,8 @@
 			  <h1 class="header-author">陈健</h1>
 			</hgroup>
 			
+			<p class="header-subtitle">在说做不到之前，我没有放弃</p>
+			
 			<nav class="header-menu">
 				<ul>
 				
@@ -128,7 +132,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+						<a class="github" target="_blank" href="/" title="github">github</a>
 			        
 						<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 			        
@@ -162,7 +166,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h2><p>Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流程，您可以管理这些环境之间的配置，并确定应用程序具有迁移时需要运行的一切。默认实现基于git 仓库，可以进行 版本管理，当然他也提供本地存储方式和subversion。</p>
-<h2 id="Config-Server端配置"><a href="#Config-Server端配置" class="headerlink" title="Config Server端配置"></a><strong>Config Server端配置</strong></h2><p>pom.xml中引入spring-cloud-config-server依赖，完整依赖配置如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.7&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Brixton.RELEASE&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="Config-Server端配置"><a href="#Config-Server端配置" class="headerlink" title="Config Server端配置"></a><strong>Config Server端配置</strong></h2><p>pom.xml中引入spring-cloud-config-server依赖，完整依赖配置如下：</p>
+<a id="more"></a>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.7&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Brixton.RELEASE&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure>
 <p>application.properties配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">spring.application.name = config-server</div><div class="line">server.port = <span class="number">8888</span></div><div class="line">spring.cloud.config.server.git.uri = https:<span class="comment">//github.com/chenjian122/config-server.git</span></div><div class="line">spring.cloud.config.uri =http:<span class="comment">//localhost:8888</span></div></pre></td></tr></table></figure></p>
 <ul>
 <li>spring.cloud.config.server.git.uri：配置git仓库位置</li>
@@ -237,25 +243,6 @@
 </nav>
 
 
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-	    <a class="jiathis_button_twitter"></a>
-	    <a class="jiathis_button_plus"></a> 
-	    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
 
 
 

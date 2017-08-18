@@ -6,16 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Hexo</title>
+  <title>陈健的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="陈健的博客">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="陈健的博客">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="陈健的博客">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="陈健的博客" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -41,6 +41,8 @@
 		  <h1 class="header-author"><a href="/">陈健</a></h1>
 		</hgroup>
 
+		
+		<p class="header-subtitle">在说做不到之前，我没有放弃</p>
 		
 
 		<nav class="header-menu">
@@ -79,7 +81,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+					<a class="github" target="_blank" href="/" title="github">github</a>
 		        
 					<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 		        
@@ -110,6 +112,8 @@
 			  <h1 class="header-author">陈健</h1>
 			</hgroup>
 			
+			<p class="header-subtitle">在说做不到之前，我没有放弃</p>
+			
 			<nav class="header-menu">
 				<ul>
 				
@@ -122,7 +126,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+						<a class="github" target="_blank" href="/" title="github">github</a>
 			        
 						<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 			        
@@ -157,21 +161,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在<a href="https://chenjian122.github.io/2017/08/15/Eureka/" target="_blank" rel="external">Sring Cloud Eureka(服务注册与发现)</a> 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。</p>
+        <p>在<a href="https://chenjian122.github.io/2017/08/15/Eureka/">Sring Cloud Eureka(服务注册与发现)</a> 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。</p>
 <h3 id="Eureka-Server的高可用"><a href="#Eureka-Server的高可用" class="headerlink" title="Eureka Server的高可用"></a>Eureka Server的高可用</h3><p>Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Server配置其他可用的serviceUrl就能实现高可用部署。</p>
-<p>首先我们需要修改host文件 添加peer1，peer2，peer3的转换<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">127.0</span>.0.1 peer1</div><div class="line"><span class="number">127.0</span>.0.1 peer2</div><div class="line"><span class="number">127.0</span>.0.1 peer3</div></pre></td></tr></table></figure></p>
-<p>Windows的hosts路径为：C:\Windows\System32\drivers\etc<br>linux的hosts路径为：/etc/hosts<br>这样的话host就都转换成本机了</p>
-<p>下面我们分别创建application-peer1.properties，application-peer2.properties，application-peer3.properties3个文件分别作为服务中心的配置，用—分割每个配置文件的内容<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8761</span></div><div class="line">eureka.instance.hostname = peer1</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer2:8762/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8762</span></div><div class="line">eureka.instance.hostname = peer2</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8763</span></div><div class="line">eureka.instance.hostname = peer3</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/</span></div></pre></td></tr></table></figure></p>
-<p>创建Spring Boot应用分别启动peer1、peer2、peer3三个服务注册中心<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableEurekaServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(<span class="string">"--spring.profiles.active=peer1"</span>);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后修改–spring.profiles.active=peer2 ，–spring.profiles.active=peer3 启动</p>
-<p>当然你也可以打成jar包启动<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer1</div><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer2</div><div class="line">java -jar eureka-server-<span class="number">0.0</span>.1-SNAPSHOT.jar --spring.profiles.active=peer3</div></pre></td></tr></table></figure></p>
-<p>然后我们可以访问peer1的注册中心：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a> ，peer2的注册中心：<a href="http://localhost:8762/" target="_blank" rel="external">http://localhost:8762/</a> ，peer3的注册中心：<a href="http://localhost:8763/" target="_blank" rel="external">http://localhost:8763/</a></p>
-<h3 id="客户端使用配置"><a href="#客户端使用配置" class="headerlink" title="客户端使用配置"></a>客户端使用配置</h3><p>只需要将之前的单节点的配置改为多节点即可，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-client</div><div class="line">server.port = <span class="number">8768</span></div><div class="line">eureka.client.serviceUrl.defaultZone=http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/</span></div></pre></td></tr></table></figure></p>
-<p>启动该服务后，通过访问<a href="http://localhost:8761/、http://localhost:8762/" target="_blank" rel="external">http://localhost:8761/、http://localhost:8762/</a> 和 <a href="http://localhost:8763/" target="_blank" rel="external">http://localhost:8763/</a> ，可以观察到eureka-client同时被注册到了peer1、peer2和peer3上。若此时断开peer1，由于eureka-client同时也向peer2、peer3注册，因此在peer2、peer3上其他服务依然能访问到eureka-client，从而实现了高可用的服务注册中心。</p>
-<p>效果图<br><img src="/images/20170817160242.png" alt="Alt text"></p>
-<p><img src="/images/20170817160158.png" alt="Alt text"></p>
-<p><img src="/images/20170817160305.png" alt="Alt text"></p>
-
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/08/17/Eureka-cluster/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
@@ -222,36 +216,9 @@
       
         <h3 id="理解eureka的自我保护机制"><a href="#理解eureka的自我保护机制" class="headerlink" title="理解eureka的自我保护机制"></a><strong>理解eureka的自我保护机制</strong></h3><p><img src="/images/20170816143304.png" alt="Alt text"></p>
 <p>向上图在这样出现THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS这样的信息说明进入了自我保护。</p>
-<p>从上图我们可以看到两个状态：<br>Renews threshold：Eureka Server 每分钟期待收到的续约数量<br>Renews (last min): 之前1分钟内 Eureka Server 收到的续约数量</p>
-<p><strong> 先解释下什么是自我保护模式，以及自我保护模式的机制和作用：</strong><br>自我保护模式用来处理避免因为网络的原因，没能够向Eureka Server更新租约，而清理服务，其实服务这时还是正常可用的。所以为了尽可能的提高服务可用性，最好开启 Eureka Server 的自我保护模式。</p>
-<p>进入自我保护模式的判断逻辑是：默认是每15分钟检测一次，当实际接收到的上1分钟续约请求数(Renews (last min)) &lt;= 期待接收到的每分钟续约请求数(Renews threshold),则触发自我保护。当自我保护模式触发的时候，Eureka Server将不再从服务注册列表中清理不可用服务。</p>
-<p>如果你只开启1个Eureka Server实例 且没有开启任何服务实例去向这个Eureka Server注册服务的时候，你会发现Renews threshold的值显示为1，并且，运行15分钟之后，Eureka Server就进入自我保护模式了。因为Renews (last min) 的值始终为 0，那么自然地，15分钟后，0 &lt; 1，自我保护开启。就会出现上图的情景。</p>
-<p>所以当我们在开发一个Eureka Server案例的时候，往往启动一个Eureka Server实例，然后再启动一个服务实例，发现服务列表里有一个服务，再然后关掉服务后，发现服务列表里服务还存在，其实这是因为自我保护开启了。那我们应该怎么处理呢，下面我来仔细讲讲自我保护涉及到的一些参数。</p>
-<p><strong> 相关参数 </strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">eureka.instance.leaseRenewalIntervalInSeconds = 30 #client发送心跳的频率 默认30秒</div><div class="line">eureka.server.renewalPercentThreshold = 0.85 #触发自我保护的心跳数比例阈值 默认0.85</div><div class="line">eureka.server.renewalThresholdUpdateIntervalMs = 15 * 60 * 1000 #多久重置一下心跳阈值 默认15分钟</div></pre></td></tr></table></figure></p>
-<p><strong> 一些计算公式 </strong><br>从一个客户端实例中期望的心跳数/分钟<br>factor = 60/leaseRenewalIntervalInSeconds 默认每30秒更新一次，所以是2次，其实上面可以发现当启动一个服务实例时Renews (last min)为2。</p>
-<p>多个实例的心跳数/分钟<br>factor * N 这主要是用于部署多个Eureka Server实例，也就是说如果部署2个Eureka Serve实例，那启动一个服务实例时Renews (last min)为4。</p>
-<p>最低预期心跳阈值<br>factor * N * renewalPercentThreshold 所以刚开始启动时 Renews threshold为(2 * 1 * 0.85 ≈ 1)</p>
-<p>下面我们来通过源码看看具体的逻辑</p>
-<p>Eureka Server启动时<br>com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openForTraffic</span><span class="params">(ApplicationInfoManager applicationInfoManager, <span class="keyword">int</span> count)</span> </span>&#123;</div><div class="line">        <span class="comment">// Renewals happen every 30 seconds and for a minute it should be a factor of 2.</span></div><div class="line">        <span class="keyword">this</span>.expectedNumberOfRenewsPerMin = count * <span class="number">2</span>;</div><div class="line">        <span class="keyword">this</span>.numberOfRenewsPerMinThreshold =</div><div class="line">                (<span class="keyword">int</span>) (<span class="keyword">this</span>.expectedNumberOfRenewsPerMin * serverConfig.getRenewalPercentThreshold());</div><div class="line">        logger.info(<span class="string">"Got "</span> + count + <span class="string">" instances from neighboring DS node"</span>);</div><div class="line">        logger.info(<span class="string">"Renew threshold is: "</span> + numberOfRenewsPerMinThreshold);</div><div class="line">        <span class="keyword">this</span>.startupTime = System.currentTimeMillis();</div><div class="line">        <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.peerInstancesTransferEmptyOnStartup = <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        DataCenterInfo.Name selfName = applicationInfoManager.getInfo().getDataCenterInfo().getName();</div><div class="line">        <span class="keyword">boolean</span> isAws = Name.Amazon == selfName;</div><div class="line">        <span class="keyword">if</span> (isAws &amp;&amp; serverConfig.shouldPrimeAwsReplicaConnections()) &#123;</div><div class="line">            logger.info(<span class="string">"Priming AWS connections for all replicas.."</span>);</div><div class="line">            primeAwsReplicas(applicationInfoManager);</div><div class="line">        &#125;</div><div class="line">        logger.info(<span class="string">"Changing status to UP"</span>);</div><div class="line">        applicationInfoManager.setInstanceStatus(InstanceStatus.UP);</div><div class="line">        <span class="keyword">super</span>.postInit();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>其中count为eureka个数，expectedNumberOfRenewsPerMin（每30秒更新一次，一分钟内它应该是2的倍数）</p>
-<p>client注册时<br>com.netflix.eureka.registry.AbstractInstanceRegistry</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* Registers a new instance with a given duration.</div><div class="line">*</div><div class="line">* <span class="doctag">@see</span> com.netflix.eureka.lease.LeaseManager#register(java.lang.Object, int, boolean)</div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(InstanceInfo registrant, <span class="keyword">int</span> leaseDuration, <span class="keyword">boolean</span> isReplication)</span> </span>&#123;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">            read.lock();</div><div class="line">            Map&lt;String, Lease&lt;InstanceInfo&gt;&gt; gMap = registry.get(registrant.getAppName());</div><div class="line">            REGISTER.increment(isReplication);</div><div class="line">            <span class="keyword">if</span> (gMap == <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">final</span> ConcurrentHashMap&lt;String, Lease&lt;InstanceInfo&gt;&gt; gNewMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, Lease&lt;InstanceInfo&gt;&gt;();</div><div class="line">                gMap = registry.putIfAbsent(registrant.getAppName(), gNewMap);</div><div class="line">                <span class="keyword">if</span> (gMap == <span class="keyword">null</span>) &#123;</div><div class="line">                    gMap = gNewMap;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            Lease&lt;InstanceInfo&gt; existingLease = gMap.get(registrant.getId());</div><div class="line">            <span class="comment">// Retain the last dirty timestamp without overwriting it, if there is already a lease</span></div><div class="line">            <span class="keyword">if</span> (existingLease != <span class="keyword">null</span> &amp;&amp; (existingLease.getHolder() != <span class="keyword">null</span>)) &#123;</div><div class="line">                Long existingLastDirtyTimestamp = existingLease.getHolder().getLastDirtyTimestamp();</div><div class="line">                Long registrationLastDirtyTimestamp = registrant.getLastDirtyTimestamp();</div><div class="line">                logger.debug(<span class="string">"Existing lease found (existing=&#123;&#125;, provided=&#123;&#125;"</span>, existingLastDirtyTimestamp, registrationLastDirtyTimestamp);</div><div class="line">                <span class="keyword">if</span> (existingLastDirtyTimestamp &gt; registrationLastDirtyTimestamp) &#123;</div><div class="line">                    logger.warn(<span class="string">"There is an existing lease and the existing lease's dirty timestamp &#123;&#125; is greater"</span> +</div><div class="line">                            <span class="string">" than the one that is being registered &#123;&#125;"</span>, existingLastDirtyTimestamp, registrationLastDirtyTimestamp);</div><div class="line">                    logger.warn(<span class="string">"Using the existing instanceInfo instead of the new instanceInfo as the registrant"</span>);</div><div class="line">                    registrant = existingLease.getHolder();</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// The lease does not exist and hence it is a new registration</span></div><div class="line">                <span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.expectedNumberOfRenewsPerMin &gt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">// Since the client wants to cancel it, reduce the threshold</span></div><div class="line">                        <span class="comment">// (1</span></div><div class="line">                        <span class="comment">// for 30 seconds, 2 for a minute)</span></div><div class="line">                        <span class="keyword">this</span>.expectedNumberOfRenewsPerMin = <span class="keyword">this</span>.expectedNumberOfRenewsPerMin + <span class="number">2</span>;</div><div class="line">                        <span class="keyword">this</span>.numberOfRenewsPerMinThreshold =</div><div class="line">                                (<span class="keyword">int</span>) (<span class="keyword">this</span>.expectedNumberOfRenewsPerMin * serverConfig.getRenewalPercentThreshold());</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                logger.debug(<span class="string">"No previous lease information found; it is new registration"</span>);</div><div class="line">            &#125;</div><div class="line">            Lease&lt;InstanceInfo&gt; lease = <span class="keyword">new</span> Lease&lt;InstanceInfo&gt;(registrant, leaseDuration);</div><div class="line">            <span class="keyword">if</span> (existingLease != <span class="keyword">null</span>) &#123;</div><div class="line">                lease.setServiceUpTimestamp(existingLease.getServiceUpTimestamp());</div><div class="line">            &#125;</div><div class="line">            gMap.put(registrant.getId(), lease);</div><div class="line">            <span class="keyword">synchronized</span> (recentRegisteredQueue) &#123;</div><div class="line">                recentRegisteredQueue.add(<span class="keyword">new</span> Pair&lt;Long, String&gt;(</div><div class="line">                        System.currentTimeMillis(),</div><div class="line">                        registrant.getAppName() + <span class="string">"("</span> + registrant.getId() + <span class="string">")"</span>));</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// This is where the initial state transfer of overridden status happens</span></div><div class="line">            <span class="keyword">if</span> (!InstanceStatus.UNKNOWN.equals(registrant.getOverriddenStatus())) &#123;</div><div class="line">                logger.debug(<span class="string">"Found overridden status &#123;&#125; for instance &#123;&#125;. Checking to see if needs to be add to the "</span></div><div class="line">                                + <span class="string">"overrides"</span>, registrant.getOverriddenStatus(), registrant.getId());</div><div class="line">                <span class="keyword">if</span> (!overriddenInstanceStatusMap.containsKey(registrant.getId())) &#123;</div><div class="line">                    logger.info(<span class="string">"Not found overridden id &#123;&#125; and hence adding it"</span>, registrant.getId());</div><div class="line">                    overriddenInstanceStatusMap.put(registrant.getId(), registrant.getOverriddenStatus());</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            InstanceStatus overriddenStatusFromMap = overriddenInstanceStatusMap.get(registrant.getId());</div><div class="line">            <span class="keyword">if</span> (overriddenStatusFromMap != <span class="keyword">null</span>) &#123;</div><div class="line">                logger.info(<span class="string">"Storing overridden status &#123;&#125; from map"</span>, overriddenStatusFromMap);</div><div class="line">                registrant.setOverriddenStatus(overriddenStatusFromMap);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// Set the status based on the overridden status rules</span></div><div class="line">            InstanceStatus overriddenInstanceStatus = getOverriddenInstanceStatus(registrant, existingLease, isReplication);</div><div class="line">            registrant.setStatusWithoutDirty(overriddenInstanceStatus);</div><div class="line"></div><div class="line">            <span class="comment">// If the lease is registered with UP status, set lease service up timestamp</span></div><div class="line">            <span class="keyword">if</span> (InstanceStatus.UP.equals(registrant.getStatus())) &#123;</div><div class="line">                lease.serviceUp();</div><div class="line">            &#125;</div><div class="line">            registrant.setActionType(ActionType.ADDED);</div><div class="line">            recentlyChangedQueue.add(<span class="keyword">new</span> RecentlyChangedItem(lease));</div><div class="line">            registrant.setLastUpdatedTimestamp();</div><div class="line">            invalidateCache(registrant.getAppName(), registrant.getVIPAddress(), registrant.getSecureVipAddress());</div><div class="line">            logger.info(<span class="string">"Registered instance &#123;&#125;/&#123;&#125; with status &#123;&#125; (replication=&#123;&#125;)"</span>,</div><div class="line">                    registrant.getAppName(), registrant.getId(), registrant.getStatus(), isReplication);</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            read.unlock();</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>每注册上一个实例，重新算一下：<br>this.expectedNumberOfRenewsPerMin = this.expectedNumberOfRenewsPerMin + 2;<br>this.numberOfRenewsPerMinThreshold = (int) (this.expectedNumberOfRenewsPerMin * serverConfig.getRenewalPercentThreshold());</p>
-<p>其实我们也可以看出 numberOfRenewsPerMinThreshold=(1+N) * 2 * 0.85</p>
-<p>重置阈值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">updateRenewalThreshold</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Applications apps = eurekaClient.getApplications();</div><div class="line">            <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">            <span class="keyword">for</span> (Application app : apps.getRegisteredApplications()) &#123;</div><div class="line">                <span class="keyword">for</span> (InstanceInfo instance : app.getInstances()) &#123;</div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.isRegisterable(instance)) &#123;</div><div class="line">                        ++count;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">                <span class="comment">// Update threshold only if the threshold is greater than the</span></div><div class="line">                <span class="comment">// current expected threshold of if the self preservation is disabled.</span></div><div class="line">                <span class="keyword">if</span> ((count * <span class="number">2</span>) &gt; (serverConfig.getRenewalPercentThreshold() * numberOfRenewsPerMinThreshold)</div><div class="line">                        || (!<span class="keyword">this</span>.isSelfPreservationModeEnabled())) &#123;</div><div class="line">                    <span class="keyword">this</span>.expectedNumberOfRenewsPerMin = count * <span class="number">2</span>;</div><div class="line">                    <span class="keyword">this</span>.numberOfRenewsPerMinThreshold = (<span class="keyword">int</span>) ((count * <span class="number">2</span>) * serverConfig.getRenewalPercentThreshold());</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            logger.info(<span class="string">"Current renewal threshold is : &#123;&#125;"</span>, numberOfRenewsPerMinThreshold);</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            logger.error(<span class="string">"Cannot update renewal threshold"</span>, e);</div><div class="line">        &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p>从上面方法中看到只有在阈值大于当前期望阈值时或者禁用了自我保护时才会更新阈值</p>
-<p>所以想避免自我保护导致的服务注册列表不能修改的问题，其实也就是要使Renews (last min) &gt; Renews threshold。我们可以进行如下处理：</p>
-<ul>
-<li>关闭自我保护  可以在配置文件加入eureka.server.enableSelfPreservation=false  不建议使用</li>
-<li>调小eureka.instance.leaseRenewalIntervalInSeconds，比如设置为10秒 这样的话一个服务一分钟就可以发送6次心跳，Renews (last min)就增多了</li>
-<li>调小renewalPercentThreshold，比如改为0.49 比例阈值小了这样的话Renews threshold 也就小了</li>
-<li>多开几个服务实例，这相对来说比较麻烦</li>
-</ul>
-<p>为什么说开多个服务实例也可以达到呢？下面我举个列子:<br>当我们开4个服务实例时：<br>Renews threshold = (4+1)*2*0.85 ≈ 8<br>Renews (last min) = 4*2 = 8<br>不满足</p>
-<p>当我们开5个服务实例时：<br>Renews threshold = (5+1)*2*0.85 ≈ 10<br>Renews (last min) = 5*2 = 10<br>不满足</p>
-<p>当我们开6个服务实例时：<br>Renews threshold = (6+1)*2*0.85 ≈ 11<br>Renews (last min) = 6*2 = 12<br>满足</p>
-<p>所以比较麻烦只有当我们开到6个服务时才会满足，所以推荐设置renewalPercentThreshold和leaseRenewalIntervalInSeconds的值。</p>
-
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/08/16/Eureka-Protect/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
@@ -301,20 +268,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h3><p>Eureka是Netflix的服务治理模块。可以将服务器配置和部署为高可用性(高可用一般指服务的冗余，一个服务挂了，可以自动切换到另一个服务上，不会影响到客户体验)。</p>
-<h3 id="eureka服务端-服务注册中心"><a href="#eureka服务端-服务注册中心" class="headerlink" title="eureka服务端(服务注册中心)"></a>eureka服务端(服务注册中心)</h3><p>pom.xml中引入所需要的依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-starter-eureka-server&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Dalston.SR2&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
-<p>默认情况下eureka服务器也是一个eureka客户端。如果要使用单服务模式，只需要在application.properties进行如下配置：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8761</span></div><div class="line"></div><div class="line">eureka.instance.hostname = localhost</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span></div></pre></td></tr></table></figure></p>
-<p>创建Spring Boot应用，并添加@EnableEurekaServer注解启动一个服务注册中心<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableEurekaServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">	</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(args);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>启动工程后，访问：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a></p>
-<p><img src="/images/20170815144825.png" alt="Alt text"></p>
-<p>我们可以发现还没有任何服务。下面我来创建eureka客户端用来提供服务</p>
-<h3 id="eureka客户端-服务提供方"><a href="#eureka客户端-服务提供方" class="headerlink" title="eureka客户端(服务提供方)"></a>eureka客户端(服务提供方)</h3><p>首先pom.xml中引入所需要的依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Dalston.SR2&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
-<p>然后要配置eureka服务器的位置，对application.properties文件进行如下配置：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-client</div><div class="line">server.port = <span class="number">8762</span></div><div class="line"></div><div class="line">eureka.client.serviceUrl.defaultZone=http:<span class="comment">//localhost:8761/eureka/</span></div></pre></td></tr></table></figure></p>
-<p>当一个客户端注册到eureka，它会提供关于它自己的端口、地址、健康监控url和home页面等等的元数据，erueka会从每个实例接受心跳信息。如果心跳在配置的时间内失败，实例通常会从注册表中移除。 </p>
-<p>创建Spring Boot应用，并添加@EnableEurekaClient注解,这个标注只能用于eureka服务，还可以使用@EnableDiscoveryClient。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@EnableEurekaClient</span></div><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(args);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>启动该工程后，再次访问：<a href="http://localhost:8761/" target="_blank" rel="external">http://localhost:8761/</a></p>
-<p><img src="/images/20170815151346.png" alt="Alt text"></p>
-<p>可以看到，我们定义的服务注册成功了。</p>
-
+<h3 id="eureka服务端-服务注册中心"><a href="#eureka服务端-服务注册中心" class="headerlink" title="eureka服务端(服务注册中心)"></a>eureka服务端(服务注册中心)</h3><p>pom.xml中引入所需要的依赖</p>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/08/15/Eureka/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
@@ -364,40 +321,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h2><p>Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。使用Config Server，您可以在所有环境中管理应用程序的外部属性。客户端和服务器上的概念映射与Spring Environment和PropertySource抽象相同，因此它们与Spring应用程序非常契合，但可以与任何以任何语言运行的应用程序一起使用。随着应用程序通过从开发人员到测试和生产的部署流程，您可以管理这些环境之间的配置，并确定应用程序具有迁移时需要运行的一切。默认实现基于git 仓库，可以进行 版本管理，当然他也提供本地存储方式和subversion。</p>
-<h2 id="Config-Server端配置"><a href="#Config-Server端配置" class="headerlink" title="Config Server端配置"></a><strong>Config Server端配置</strong></h2><p>pom.xml中引入spring-cloud-config-server依赖，完整依赖配置如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.7&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Brixton.RELEASE&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
-<p>application.properties配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">spring.application.name = config-server</div><div class="line">server.port = <span class="number">8888</span></div><div class="line">spring.cloud.config.server.git.uri = https:<span class="comment">//github.com/chenjian122/config-server.git</span></div><div class="line">spring.cloud.config.uri =http:<span class="comment">//localhost:8888</span></div></pre></td></tr></table></figure></p>
-<ul>
-<li>spring.cloud.config.server.git.uri：配置git仓库位置</li>
-<li>spring.cloud.config.server.git.searchPaths：配置仓库路径下的相对搜位置</li>
-<li>spring.cloud.config.server.git.username：远程存储库上使用HTTP基本身份验证：访问git仓库的用户名</li>
-<li>spring.cloud.config.server.git.password：远程存储库上使用HTTP基本身份验证：访问git仓库的用户密码</li>
-</ul>
-<p>创建Spring Boot的程序主类，启动项目<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableConfigServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      SpringApplication.run(Application.class, args);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这样，使用git管理内容的配置中心已经完成了。我们可以用浏览器来访问。<br><a href="http://localhost:8888/springboot/dev/master" target="_blank" rel="external">http://localhost:8888/springboot/dev/master</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"name"</span>:<span class="string">"springboot"</span>,</div><div class="line">    <span class="string">"profiles"</span>:[</div><div class="line">        <span class="string">"dev"</span></div><div class="line">    ],</div><div class="line">    <span class="string">"label"</span>:<span class="string">"master"</span>,</div><div class="line">    <span class="string">"version"</span>:<span class="string">"6f9070334c43e1b84424a492566f6c5611139c70"</span>,</div><div class="line">    <span class="string">"state"</span>:<span class="keyword">null</span>,</div><div class="line">    <span class="string">"propertySources"</span>:[</div><div class="line">        &#123;</div><div class="line">            <span class="string">"name"</span>:<span class="string">"https://github.com/chenjian122/config-server.git/springboot-dev.properties"</span>,</div><div class="line">            <span class="string">"source"</span>:&#123;</div><div class="line">                <span class="string">"spring.jdbc.password"</span>:<span class="string">"123456"</span>,</div><div class="line">                <span class="string">"spring.jdbc.host"</span>:<span class="string">"localhost"</span>,</div><div class="line">                <span class="string">"path"</span>:<span class="string">"D:/upload/"</span>,</div><div class="line">                <span class="string">"spring.jdbc.user"</span>:<span class="string">"root"</span>,</div><div class="line">                <span class="string">"spring.jdbc.port"</span>:<span class="string">"3306"</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>想要 json 格式的怎么办呢？<br><a href="http://localhost:8888/master/springboot-dev.json" target="_blank" rel="external">http://localhost:8888/master/springboot-dev.json</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"path"</span>:<span class="string">"D:/upload/"</span>,</div><div class="line">    <span class="string">"spring"</span>:&#123;</div><div class="line">        <span class="string">"jdbc"</span>:&#123;</div><div class="line">            <span class="string">"host"</span>:<span class="string">"localhost"</span>,</div><div class="line">            <span class="string">"password"</span>:<span class="string">"123456"</span>,</div><div class="line">            <span class="string">"port"</span>:<span class="string">"3306"</span>,</div><div class="line">            <span class="string">"user"</span>:<span class="string">"root"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>yml<br><a href="http://localhost:8888/master/springboot-dev.yml" target="_blank" rel="external">http://localhost:8888/master/springboot-dev.yml</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">path: D:/upload/</div><div class="line">spring:</div><div class="line">  jdbc:</div><div class="line">    host: localhost</div><div class="line">    password: <span class="string">'123456'</span></div><div class="line">    port: <span class="string">'3306'</span></div><div class="line">    user: root</div></pre></td></tr></table></figure></p>
-<p>properties<br><a href="http://localhost:8888/master/springboot-dev.properties" target="_blank" rel="external">http://localhost:8888/master/springboot-dev.properties</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">path: D:/upload/</div><div class="line">spring.jdbc.host: localhost</div><div class="line">spring.jdbc.password: <span class="number">123456</span></div><div class="line">spring.jdbc.port: <span class="number">3306</span></div><div class="line">spring.jdbc.user: root</div></pre></td></tr></table></figure></p>
-<h3 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h3><p>如果觉得直接访问config-server的url不安全，你可以通过Spring Security来保护您的Config Server。<br>加入Spring Security依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
-<p>默认用户名是”user”，密码随机生成。建议自己设置密码进行加密。只需要通过security.user.password就可以设置密码。<br>添加如下配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">security.user.password =test</div></pre></td></tr></table></figure></p>
-<p>然后通过curl -u user:test <a href="http://localhost:8888/springboot/dev" target="_blank" rel="external">http://localhost:8888/springboot/dev</a> 进行验证：</p>
-<p><img src="/images/20170815174511.png" alt="Alt text"></p>
-<p>说明成功读取到了服务器文件内容。</p>
-<h3 id="配置环境仓库-Environment-Repository"><a href="#配置环境仓库-Environment-Repository" class="headerlink" title="配置环境仓库( Environment Repository )"></a>配置环境仓库( Environment Repository )</h3><p>HTTP服务具有以下格式的资源：</p>
-<ul>
-<li>/{application}/{profile}[/{label}]</li>
-<li>/{application}-{profile}.yml</li>
-<li>/{label}/{application}-{profile}.yml</li>
-<li>/{application}-{profile}.properties</li>
-<li>/{label}/{application}-{profile}.properties</li>
-</ul>
-<p>其中{application}对应spring.application.name属性;{profile}对应spring.profiles.active属性(用逗号分隔)，可以用来区分环境，比如dev，test，pro等等;{label}对应git上不同的分支，默认为master。</p>
-<h3 id="Client端配置"><a href="#Client端配置" class="headerlink" title="Client端配置"></a>Client端配置</h3><p>创建一个普通的SpringBoot项目，在pom.xml中引入spring-cloud-starter-config依赖<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line">&lt;/parent&gt;</div><div class="line">&lt;properties&gt;</div><div class="line">   &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">   &lt;java.version&gt;1.7&lt;/java.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line">&lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">     &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div><div class="line">&lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;Brixton.RELEASE&lt;/version&gt;</div><div class="line">         &lt;type&gt;pom&lt;/type&gt;</div><div class="line">         &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line">&lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure></p>
-<p>bootstrap.properties配置<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 要读取的配置文件application属性</div><div class="line">spring.cloud.config.name=springboot</div><div class="line"># 配置中心服务的地址</div><div class="line">spring.cloud.config.uri=http://localhost:8888/</div><div class="line"># 要读取的配置文件profile属性,默认是dev</div><div class="line">spring.cloud.config.profile=dev</div><div class="line"># 配置文件的git分支</div><div class="line">spring.cloud.config.label=master</div></pre></td></tr></table></figure></p>
-<p>如果您在服务器上使用HTTP Basic进行security加密，那么客户端需要配置用户名密码，您可以通过配置服务器URI，或通过单独的用户名和密码属性，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">spring.cloud.config.uri=http:<span class="comment">//user:test@localhost:8888/</span></div></pre></td></tr></table></figure></p>
-<p>或者<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">spring.cloud.config.username = user</div><div class="line">spring.cloud.config.password = test</div></pre></td></tr></table></figure></p>
-<p>创建Spring Boot的程序主类，并且通过Res来返回配置中心的path属性<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@RestController</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">   <span class="meta">@Value</span>(<span class="string">"$&#123;path&#125;"</span>)</div><div class="line">   <span class="keyword">private</span> String path;</div><div class="line">	</div><div class="line">   <span class="meta">@RequestMapping</span>(<span class="string">"/"</span>)</div><div class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">getPath</span><span class="params">()</span></span>&#123;</div><div class="line">      <span class="keyword">return</span> path;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      SpringApplication.run(Application.class, args);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>启动该应用，并访问：<a href="http://localhost:8080/" target="_blank" rel="external">http://localhost:8080/</a> ，我们就可以根据配置内容输出对应环境的path内容了。</p>
-
+<h2 id="Config-Server端配置"><a href="#Config-Server端配置" class="headerlink" title="Config Server端配置"></a><strong>Config Server端配置</strong></h2><p>pom.xml中引入spring-cloud-config-server依赖，完整依赖配置如下：</p>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/08/11/springcloud-config/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
@@ -448,132 +375,9 @@
       
         <h2 id="版本命名"><a href="#版本命名" class="headerlink" title="版本命名"></a><strong>版本命名</strong></h2><p>Spring Cloud是一个由很多子项目组成的一个大型项目，原则上都有自己的发布版本。为了要管理每个版本的子项目清单，所以命名没有采用版本号的方式，而是通过命名的方式，以避免版本名与子项目的发布号混淆。</p>
 <p>版本名称采用了伦敦地铁站的名字，根据字母表的顺序来对应版本时间顺序(第一个版本：Angel，第二个版本：Brixton，依次类推Camden、Dalston、Edgware、Finchley……)。当个别项目发布积累到临界点或者解决了其中一个严重的bug时。将会发布一个名为“.SRX”的 “service releases”版本。其中“X”是数字，依次递增。比如Camden SR7的SR7、Dalston SR2的SR2就是版本号了。</p>
-<h2 id="版本内容"><a href="#版本内容" class="headerlink" title="版本内容"></a><strong>版本内容</strong></h2><table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Camden.SR7</th>
-<th>Dalston.SR2</th>
-<th>Edgware.BUILD-SNAPSHOT</th>
-<th>Finchley.BUILD-SNAPSHOT</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>spring-cloud-aws</td>
-<td>1.1.4.RELEASE</td>
-<td>1.2.1.RELEASE</td>
-<td>1.2.2.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-bus</td>
-<td>1.2.2.RELEASE</td>
-<td>1.3.1.RELEASE</td>
-<td>1.3.2.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-cli</td>
-<td>1.2.4.RELEASE</td>
-<td>1.3.4.RELEASE</td>
-<td>1.4.0.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-commons</td>
-<td>1.1.9.RELEASE</td>
-<td>1.2.3.RELEASE</td>
-<td>1.3.0.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-contract</td>
-<td>1.0.5.RELEASE</td>
-<td>1.1.2.RELEASE</td>
-<td>1.2.0.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-config</td>
-<td>1.2.3.RELEASE</td>
-<td>1.3.2.RELEASE</td>
-<td>1.4.0.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-netflix</td>
-<td>1.2.7.RELEASE</td>
-<td>1.3.2.RELEASE</td>
-<td>1.4.0.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-security</td>
-<td>1.1.4.RELEASE</td>
-<td>1.2.1.RELEASE</td>
-<td>1.2.2.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-cloudfoundry</td>
-<td>1.0.1.RELEASE</td>
-<td>1.1.0.RELEASE</td>
-<td>1.1.1.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-consul</td>
-<td>1.1.4.RELEASE</td>
-<td>1.2.1.RELEASE</td>
-<td>1.2.2.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-sleuth</td>
-<td>1.1.3.RELEASE</td>
-<td>1.2.2.RELEASE</td>
-<td>1.3.0.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-stream</td>
-<td>Brooklyn.SR3</td>
-<td>Chelsea.SR2</td>
-<td>Ditmars.BUILD-SNAPSHOT</td>
-<td>Elmhurst.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-zookeeper</td>
-<td>1.0.4.RELEASE</td>
-<td>1.1.1.RELEASE</td>
-<td>1.1.2.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-boot</td>
-<td>1.4.5.RELEASE</td>
-<td>1.5.4.RELEASE</td>
-<td>1.5.4.RELEASE</td>
-<td>2.0.0.M2</td>
-</tr>
-<tr>
-<td>spring-cloud-task</td>
-<td>1.0.3.RELEASE</td>
-<td>1.1.2.RELEASE</td>
-<td>1.2.0.RELEASE</td>
-<td>2.0.0.RELEASE</td>
-</tr>
-<tr>
-<td>spring-cloud-vault</td>
-<td></td>
-<td>1.0.2.RELEASE</td>
-<td>1.0.2.BUILD-SNAPSHOT</td>
-<td>2.0.0.BUILD-SNAPSHOT</td>
-</tr>
-</tbody>
-</table>
-
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/08/09/springcloud-version/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
@@ -634,21 +438,9 @@
 <li>决策者竞选与集群状态</li>
 <li>分布式消息传递</li>
 </ul>
-<h2 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a><strong>主要项目</strong></h2><h3 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a><strong>Spring Cloud Config</strong></h3><p>由Git仓库支持的集中式外部配置管理。配置资源直接映射到Spring环境中，如果有需要，也可以<br>在非Spring应用中使用。</p>
-<h3 id="Spring-Cloud-Netflix"><a href="#Spring-Cloud-Netflix" class="headerlink" title="Spring Cloud Netflix"></a><strong>Spring Cloud Netflix</strong></h3><p>核心组件，对多个Netflix公司的OSS开源组件进行整合（Eureka, Hystrix, Zuul, Archaius等等）</p>
-<ul>
-<li>Eureka <br>服务发现组件。</li>
-<li>Hystrix <br>断路器，为服务依赖中出现的延迟和故障提供强大的容错能力。</li>
-<li>Ribbon <br>客户端负载均衡。</li>
-<li>Zuul <br>网关组件，提供智能路由、访问过滤等功能。</li>
-<li>Archaius <br>配置管理类库，主要用于多配置存储的动态获取。</li>
-</ul>
-<h3 id="Spring-Cloud-for-Cloud-Foundry"><a href="#Spring-Cloud-for-Cloud-Foundry" class="headerlink" title="Spring Cloud for Cloud Foundry"></a><strong>Spring Cloud for Cloud Foundry</strong></h3><p>使用Pivotal Cloudfoundry整合你的应用。提供了服务发现的实现并且使其很容易实现SSO和OAuth2<br>保护资源，以及创建一个Cloudfoundry服务代理。</p>
-<h3 id="Spring-Cloud-Security"><a href="#Spring-Cloud-Security" class="headerlink" title="Spring Cloud Security"></a><strong>Spring Cloud Security</strong></h3><p>提供了一组基本的用于构建安全应用程序和服务。基于Spring Boot和Spring Security OAuth2，<br>我们可以快速创建实现单点登录，令牌中继和令牌交换等常见模式的系统。</p>
-<h3 id="Spring-Cloud-Zookeeper"><a href="#Spring-Cloud-Zookeeper" class="headerlink" title="Spring Cloud Zookeeper"></a><strong>Spring Cloud Zookeeper</strong></h3><p>为Spring Boot应用程序提供Apache Zookeeper集成，通过几个简单的注释，您可以快速启用和配置应用<br>程序中的常见模式，并使用Zookeeper构建大型分布式系统。提供的模式包括服务发现和分布式配置。</p>
-<h3 id="Spring-Cloud-CLI"><a href="#Spring-Cloud-CLI" class="headerlink" title="Spring Cloud CLI"></a><strong>Spring Cloud CLI</strong></h3><p>为Spring Cloud提供Spring Boot命令行功能。您可以编写Groovy脚本来快速运行Spring Cloud组件应用程序。</p>
-<p>更多请参考：<a href="http://projects.spring.io/spring-cloud/" target="_blank" rel="external">http://projects.spring.io/spring-cloud/</a>.</p>
-
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/07/08/springcloud-Introduction/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">

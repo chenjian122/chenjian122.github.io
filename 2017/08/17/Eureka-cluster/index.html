@@ -6,27 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Sring Cloud服务注册中心高可用集群 | Hexo</title>
+  <title>Sring Cloud服务注册中心高可用集群 | 陈健的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在Sring Cloud Eureka(服务注册与发现) 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。
 Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Serv">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sring Cloud服务注册中心高可用集群">
 <meta property="og:url" content="http://yoursite.com/2017/08/17/Eureka-cluster/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="陈健的博客">
 <meta property="og:description" content="在Sring Cloud Eureka(服务注册与发现) 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。
 Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Serv">
 <meta property="og:image" content="http://yoursite.com/images/20170817160242.png">
 <meta property="og:image" content="http://yoursite.com/images/20170817160158.png">
 <meta property="og:image" content="http://yoursite.com/images/20170817160305.png">
-<meta property="og:updated_time" content="2017-08-17T09:20:49.808Z">
+<meta property="og:updated_time" content="2017-08-18T05:57:06.936Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sring Cloud服务注册中心高可用集群">
 <meta name="twitter:description" content="在Sring Cloud Eureka(服务注册与发现) 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。
 Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Serv">
 <meta name="twitter:image" content="http://yoursite.com/images/20170817160242.png">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="陈健的博客" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -52,6 +52,8 @@ Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过
 		  <h1 class="header-author"><a href="/">陈健</a></h1>
 		</hgroup>
 
+		
+		<p class="header-subtitle">在说做不到之前，我没有放弃</p>
 		
 
 		<nav class="header-menu">
@@ -90,7 +92,7 @@ Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+					<a class="github" target="_blank" href="/" title="github">github</a>
 		        
 					<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 		        
@@ -121,6 +123,8 @@ Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过
 			  <h1 class="header-author">陈健</h1>
 			</hgroup>
 			
+			<p class="header-subtitle">在说做不到之前，我没有放弃</p>
+			
 			<nav class="header-menu">
 				<ul>
 				
@@ -133,7 +137,7 @@ Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+						<a class="github" target="_blank" href="/" title="github">github</a>
 			        
 						<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
 			        
@@ -168,6 +172,7 @@ Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过
       
         <p>在<a href="https://chenjian122.github.io/2017/08/15/Eureka/" target="_blank" rel="external">Sring Cloud Eureka(服务注册与发现)</a> 这篇文章中我们已经介绍了单点的服务注册中心，下面我们来看看该如何构建高可用的Eureka Server集群。</p>
 <h3 id="Eureka-Server的高可用"><a href="#Eureka-Server的高可用" class="headerlink" title="Eureka Server的高可用"></a>Eureka Server的高可用</h3><p>Eureka Server除了单点运行之外，还可以通过运行多个实例，并进行互相注册，实现完全对等的方式来实现高可用，任何一个节点挂掉都不会影响服务的注册与发现。所以我们只需要将Eureke Server配置其他可用的serviceUrl就能实现高可用部署。</p>
+<a id="more"></a>
 <p>首先我们需要修改host文件 添加peer1，peer2，peer3的转换<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">127.0</span>.0.1 peer1</div><div class="line"><span class="number">127.0</span>.0.1 peer2</div><div class="line"><span class="number">127.0</span>.0.1 peer3</div></pre></td></tr></table></figure></p>
 <p>Windows的hosts路径为：C:\Windows\System32\drivers\etc<br>linux的hosts路径为：/etc/hosts<br>这样的话host就都转换成本机了</p>
 <p>下面我们分别创建application-peer1.properties，application-peer2.properties，application-peer3.properties3个文件分别作为服务中心的配置，用—分割每个配置文件的内容<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8761</span></div><div class="line">eureka.instance.hostname = peer1</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer2:8762/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8762</span></div><div class="line">eureka.instance.hostname = peer2</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer3:8763/eureka/</span></div><div class="line"></div><div class="line">---------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">spring.application.name = eureka-server</div><div class="line">server.port = <span class="number">8763</span></div><div class="line">eureka.instance.hostname = peer3</div><div class="line">eureka.client.register-with-eureka = <span class="keyword">false</span></div><div class="line">eureka.client.fetch-registry =<span class="keyword">false</span></div><div class="line">eureka.client.serviceUrl.defaultZone = http:<span class="comment">//peer1:8761/eureka/,http://peer2:8762/eureka/</span></div></pre></td></tr></table></figure></p>
@@ -213,25 +218,6 @@ Eureka Server的高可用Eureka Server除了单点运行之外，还可以通过
 </nav>
 
 
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-	    <a class="jiathis_button_twitter"></a>
-	    <a class="jiathis_button_plus"></a> 
-	    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
 
 
 
