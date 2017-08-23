@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>Sring Cloud 服务消费 | 陈健的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上篇文章中我们已经成功地将服务提供者：eureka-client，注册到了Eureka服务注册中心，接下来我们要学习的就是：如何去消费服务提供者的接口。
+LoadBalancerClientLoadBalancerClient 这是一个负载均衡客户端的抽象定义，下面我们就看看如何使用Spring Cloud提供的负载均衡器客户端接口来实现服务的消费。
+服务消费者(eureka-consumer)p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sring Cloud 服务消费">
+<meta property="og:url" content="http://yoursite.com/2017/08/23/serviceConsumption-basics/index.html">
+<meta property="og:site_name" content="陈健的博客">
+<meta property="og:description" content="上篇文章中我们已经成功地将服务提供者：eureka-client，注册到了Eureka服务注册中心，接下来我们要学习的就是：如何去消费服务提供者的接口。
+LoadBalancerClientLoadBalancerClient 这是一个负载均衡客户端的抽象定义，下面我们就看看如何使用Spring Cloud提供的负载均衡器客户端接口来实现服务的消费。
+服务消费者(eureka-consumer)p">
+<meta property="og:updated_time" content="2017-08-23T08:16:05.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sring Cloud 服务消费">
+<meta name="twitter:description" content="上篇文章中我们已经成功地将服务提供者：eureka-client，注册到了Eureka服务注册中心，接下来我们要学习的就是：如何去消费服务提供者的接口。
+LoadBalancerClientLoadBalancerClient 这是一个负载均衡客户端的抽象定义，下面我们就看看如何使用Spring Cloud提供的负载均衡器客户端接口来实现服务的消费。
+服务消费者(eureka-consumer)p">
+  
+    <link rel="alternative" href="/atom.xml" title="陈健的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/portrait.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">陈健</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">在说做不到之前，我没有放弃</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/">随笔</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="3" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
+		        
+					<a class="rss" target="_blank" href="/" title="rss">rss</a>
+		        
+					<a class="zhihu" target="_blank" href="/" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">陈健</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/portrait.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">陈健</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">在说做不到之前，我没有放弃</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/">随笔</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/chenjian122" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-serviceConsumption-basics" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Sring Cloud 服务消费
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上篇文章中我们已经成功地将服务提供者：eureka-client，注册到了Eureka服务注册中心，接下来我们要学习的就是：如何去消费服务提供者的接口。</p>
+<h3 id="LoadBalancerClient"><a href="#LoadBalancerClient" class="headerlink" title="LoadBalancerClient"></a>LoadBalancerClient</h3><p>LoadBalancerClient 这是一个负载均衡客户端的抽象定义，下面我们就看看如何使用Spring Cloud提供的负载均衡器客户端接口来实现服务的消费。</p>
+<h3 id="服务消费者-eureka-consumer"><a href="#服务消费者-eureka-consumer" class="headerlink" title="服务消费者(eureka-consumer)"></a>服务消费者(eureka-consumer)</h3><p>pom.xml中引入所需要的依赖</p>
+<a id="more"></a>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"> &lt;parent&gt; </div><div class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.5.4.RELEASE&lt;/version&gt;</div><div class="line"> &lt;/parent&gt;</div><div class="line"> </div><div class="line"> &lt;properties&gt;</div><div class="line">&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">&lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line"> &lt;/properties&gt;</div><div class="line"> </div><div class="line"> &lt;dependencies&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">       &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">       &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">       &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">       &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line">   &lt;dependency&gt;</div><div class="line">   	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   	&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</div><div class="line">   &lt;/dependency&gt;</div><div class="line"> &lt;/dependencies&gt;</div><div class="line"> &lt;dependencyManagement&gt;</div><div class="line">   &lt;dependencies&gt;</div><div class="line">       &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;Dalston.SR2&lt;/version&gt;</div><div class="line">          &lt;type&gt;pom&lt;/type&gt;</div><div class="line">          &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">       &lt;/dependency&gt;</div><div class="line">   &lt;/dependencies&gt;</div><div class="line"> &lt;/dependencyManagement&gt;</div></pre></td></tr></table></figure>
+<p>application.properties进行如下配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">spring.application.name = eureka-consumer</div><div class="line">server.port = <span class="number">8770</span></div><div class="line">eureka.client.serviceUrl.defaultZone=http:<span class="comment">//localhost:8761/eureka/</span></div></pre></td></tr></table></figure>
+<p>创建Spring Boot应用，并添加@EnableDiscoveryClient注解用来将当前应用加入到服务治理体系</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@EnableDiscoveryClient</span></div><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</div><div class="line">	</div><div class="line">   <span class="meta">@Bean</span></div><div class="line">   <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">restTemplate</span><span class="params">()</span></span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</div><div class="line">   &#125;</div><div class="line">	</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">      <span class="keyword">new</span> SpringApplicationBuilder(Application.class).web(<span class="keyword">true</span>).run(args);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>创建一个方法用来消费eureka-client</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RestController</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HomeController</span> </span>&#123;</div><div class="line">	</div><div class="line">   <span class="meta">@Autowired</span></div><div class="line">   <span class="keyword">private</span> RestTemplate restTemplate;</div><div class="line">	</div><div class="line">   <span class="meta">@Autowired</span></div><div class="line">   <span class="keyword">private</span> LoadBalancerClient loadBalancerClient;</div><div class="line">	</div><div class="line">   <span class="meta">@RequestMapping</span>(<span class="string">"/consumer"</span>)</div><div class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">doHello</span><span class="params">()</span></span>&#123;</div><div class="line">      ServiceInstance serviceInstance = loadBalancerClient.choose(<span class="string">"eureka-client"</span>);</div><div class="line">      String url = <span class="string">"http://"</span> + serviceInstance.getHost() + <span class="string">":"</span> + serviceInstance.getPort() + <span class="string">"/"</span>;</div><div class="line">      <span class="keyword">return</span> restTemplate.getForObject(url, String.class);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里是通过loadBalancerClient的choose函数来负载均衡的选出一个eureka-client的服务实例。<br>最后再利用RestTemplate对象实现对服务提供者接口的调用。</p>
+<p>最后可以将eureka-server、eureka-client、eureka-consumer都启动起来，然后访问<a href="http://localhost:8770/consumer" target="_blank" rel="external">http://localhost:8770/consumer</a> ，来跟踪观察eureka-consumer服务是如何消费eureka-client服务的。</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/08/23/serviceConsumption-basics/" class="archive-article-date">
+  	<time datetime="2017-08-23T09:08:00.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-23</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringCloud/">SpringCloud</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/17/Eureka-cluster/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Sring Cloud服务注册中心高可用集群</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 陈健
+    	</div>
+	本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+      <li data-hook="tools-section-friends"><span class="text">友链</span><i class="icon-link"></i></li>
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/Eureka/" style="font-size: 15px;">Eureka</a> <a href="/tags/SpringCloud/" style="font-size: 20px;">SpringCloud</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a>
+    			</div>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends">
+  		
+  			<div class="friends-wrap" id="js-friends">
+  			
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://spring4all.com/">Spring For All社区</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="https://springcloud.cc/">Spring Cloud中文网</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://cmsblogs.com/">chenssy</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.feel88.cn/">大数据</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.cnblogs.com/">博客园</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.csdn.net/">CSDN</a>
+  	        
+  	        </div>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">什么都没有留下。</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
